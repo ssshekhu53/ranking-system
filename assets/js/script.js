@@ -22,7 +22,7 @@ $(document).on('submit', '#lottery-form', function(e) {
     e.preventDefault();
     var participants=$('#lottery-form .participant-box').map(function() { return {name: $(this).find('input[name="name[]"]').val(), roll: $(this).find('input[name="roll[]"]').val()}; })
     var len=participants.length;
-    var index=Math.floor(Math.random()*(len-1));
+    var index=Math.floor(Math.random()*len);
 
     console.log(participants);
     console.log(participants[index]);
