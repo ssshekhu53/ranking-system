@@ -1,52 +1,3 @@
-$(document).on('submit', 'form#evaluator-form', function(e) {
-    e.preventDefault();
-    let expression=$(this).find('input[name="expr"]').val();
-    if(expression.length!==0)
-        $(this).find('input[name="result"]').val(eval(expression));
-});
-
-$(document).on('keypress', 'form#evaluator-form input[name="expr"]', function(e) {
-    e.preventDefault();
-    if(expressionValidator(String.fromCharCode(e.keyCode)))
-        e.target.value=e.target.value+String.fromCharCode(e.keyCode);
-    else
-        e.target.value=e.target.value;
-});
-
-$(document).on('keypress', 'form#calculator-form input[name="num[]"]', function(e) {
-    e.preventDefault();
-    if(valueValidator(String.fromCharCode(e.keyCode)))
-        e.target.value=e.target.value+String.fromCharCode(e.keyCode);
-    else
-        e.target.value=e.target.value;
-});
-
-$(document).on('click', 'form#calculator-form #andBtn', function() {
-    let num=$('form#calculator-form input[name="num[]"]').map(function() { return $(this).val() });
-    if(num[0].length!==0 && num[1].length!==0) 
-        $('form#calculator-form input[name="result"]').val(parseInt(num[0])&parseInt(num[1]));
-});
-
-$(document).on('click', 'form#calculator-form #orBtn', function() {
-    let num=$('form#calculator-form input[name="num[]"]').map(function() { return $(this).val() });
-    if(num[0].length!==0 && num[1].length!==0) 
-        $('form#calculator-form input[name="result"]').val(parseInt(num[0])|parseInt(num[1]));
-});
-
-$(document).on('click', 'form#calculator-form #xorBtn', function() {
-    let num=$('form#calculator-form input[name="num[]"]').map(function() { return $(this).val() });
-    if(num[0].length!==0 && num[1].length!==0) 
-        $('form#calculator-form input[name="result"]').val(parseInt(num[0])^parseInt(num[1]));
-});
-
-function expressionValidator(ch) {
-    return ((parseInt(ch)>=0 && parseInt(ch)<=9) || ch=='&' || ch=='|' || ch=='^')
-}
-
-function valueValidator(ch) {
-    return (parseInt(ch)>=0 && parseInt(ch)<=9);
-}
-
 let sno=1;
 
 $(document).ready(function() {
@@ -55,6 +6,7 @@ $(document).ready(function() {
 
 $(document).on('click', '.addBtn', function() {
     $('#lottery-form').append(participantBoxTemplate(sno++));
+    $('#lottery-form .participant-box:nth-last-child(1) input[name="name[]"]').focus();
     $('.removeBtn').attr('disabled', false);
 });
 
@@ -64,6 +16,23 @@ $(document).on('click', '.removeBtn', function() {
     sno--;
     if(sno<=2) 
         $('.removeBtn').attr('disabled', true);
+});
+
+$(document).on('click', '#checkResultBtn', function() {
+    var participants=$('#lottery-form .participant-box').map(function() { return {name: $(this).find('input[name="name[]"]').val(), roll: $(this).find('input[name="roll[]"]').val()}; })
+    var len=participants.length;
+    var index=Math.floor(Math.random()*(len-1));
+
+    console.log(participants);
+    console.log(participants[index]);
+
+    Swal.fire({
+        imageUrl: 'assets/img/swal_icon.png',
+        imageHeight: '25vh',
+        title: 'Congo',
+        html: `<strong>${participants[index].name.toUpperCase()} (Roll. ${participants[index].roll})</strong> is the winner! Your fee will be paid by the committe.`,
+        backdrop: 'rgba(0, 0, 0, 0.5) url(assets/img/party2.gif) repeat'
+    });
 });
 
 function changeSerialNo(selector) {
