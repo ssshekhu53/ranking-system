@@ -18,7 +18,8 @@ $(document).on('click', '.removeBtn', function() {
         $('.removeBtn').attr('disabled', true);
 });
 
-$(document).on('submit', '#lottery-form', function() {
+$(document).on('submit', '#lottery-form', function(e) {
+    e.preventDefault();
     var participants=$('#lottery-form .participant-box').map(function() { return {name: $(this).find('input[name="name[]"]').val(), roll: $(this).find('input[name="roll[]"]').val()}; })
     var len=participants.length;
     var index=Math.floor(Math.random()*(len-1));
