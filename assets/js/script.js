@@ -24,16 +24,23 @@ $(document).on('submit', '#lottery-form', function(e) {
     var len=participants.length;
     var index=Math.floor(Math.random()*len);
 
+    participants.sort((a, b) => { return a.roll-b.roll; });
     console.log(participants);
     console.log(participants[index]);
 
-    Swal.fire({
-        imageUrl: 'assets/img/swal_icon.png',
-        imageHeight: '25vh',
-        title: 'Congo',
-        html: `<strong>${participants[index].name.toUpperCase()} (Roll. ${participants[index].roll})</strong> is the winner! Your fee will be paid by your classmates.`,
-        backdrop: 'rgba(0, 0, 0, 0.5) url(assets/img/party2.gif) repeat'
-    });
+    var table="";
+    var sno=1;
+    for(var ele of Object.entries(participants)) {
+        console.log(ele);
+        if(!isNaN(ele[0]))
+            table+=tableTemplate(sno++, ele[1]);
+    };
+    $('table tbody').append(table);
+    
+});
+
+$(document).on('click', '#print-btn', function() {
+    $('table').print();
 });
 
 function changeSerialNo(selector) {
@@ -73,4 +80,12 @@ function participantBoxTemplate(sno) {
                     <button type="button" class="btn btn-outline-secondary fw-bold removeBtn" aria-boxid="#participant-box-${sno}" disabled>Remove</button>
                 </div>
             </div>`;
+}
+
+function tableTemplate(sno, data) {
+    return `<tr class="text-center">
+                <td>${sno}</td>
+                <td>${data.name}</td>
+                <td>${data.roll}</td>
+            </tr>`;
 }
