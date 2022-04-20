@@ -29,3 +29,13 @@ body {
     font-weight: bolder;
     text-decoration: none;
 }
+
+@media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .d-print-none {
+        display: none !important;
+    }
+}
